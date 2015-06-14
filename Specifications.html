@@ -1,0 +1,200 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <script src="highlight.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="style.css" />
+    <title>LAB Specifications</title>
+</head>
+
+<body>
+    <h1>LAB Specifications</h1>
+    <h2>Registers</h2>
+    <p>LAB has 256 registers. While the size of these registers is specific to
+    implementation, they must be capable of storing at least 28 bits of
+    information in order to encode all possible instructions. Standard encoding
+    of instructions requires at least 32 bits and a binary encoding.</p> <p>Most
+    of these registers are general-purpose, however certain specific registers
+    are reserved for special use. The 0 register will always store the value 0
+    and is read only. Any attempt to write to the 0 register will have no
+    effect. The last register is the program counter. While it can be accessed
+    directly, it typically should not be. The second-last register is the
+    immediate offset register. When encountered by the CPU it will load the next
+    cell in memory as the register's value and write back to it if necessary
+    incrementing the program counter as necessary. To facilitate this the CPU
+    will load at least the next 4 cells of memory for each instruction. Any
+    register may be locked by the operating system using I/O instructions
+    specific to implementation.</p>
+    
+    <h2>Instructions</h2>
+    <p>LAB runs on a heavily reduced instruction set containing only 16
+    instructions encoded across 4 bits. These instructions are organized as 4
+    sets of 4 related operations. The instructions are summarized in the
+    following table:</p>
+    <table>
+        <tr>
+            <th></th>
+            <th>Arithmetic (0)</th>
+            <th>Logic (1)</th>
+            <th>Code (2)</th>
+            <th>I/O (3)</th>
+        </tr>
+        <tr>
+            <th>0</th>
+            <td>ADD</td>
+            <td>AND</td>
+            <td>XOR</td>
+            <td>LDR</td>
+        </tr>
+        <tr>
+            <th>1</th>
+            <td>SUB</td>
+            <td>NAN</td>
+            <td>XOR</td>
+            <td>STR</td>
+        </tr>
+        <tr>
+            <th>2</th>
+            <td>MUL</td>
+            <td>ORR</td>
+            <td>BGT</td>
+            <td>GET</td>
+        </tr>
+        <tr>
+            <th>3</th>
+            <td>DIV</td>
+            <td>NOR</td>
+            <td>BEQ</td>
+            <td>PUT</td>
+        </tr>
+    </table>
+
+    <p>What follows is a more detailed description of each instruction.</p>
+    <table>
+        <tr>
+            <th width="8%">Encoding</th>
+            <th width="12%">Name</th>
+            <th width="12%">Mnemonic</th>
+            <th width="66%">Description</th>
+            <th width="2%">Time</th>
+        </tr>
+        <tr>
+            <td>00AABBCC</td>
+            <td>Add</td>
+            <td>ADD RA RB RC</td>
+            <td>Adds RA and RB, storing the result in RC.</td> 
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>10AABBCC</td>
+            <td>Subtract</td>
+            <td>SUB RA RB RC</td>
+            <td>Subtracts RB from RA, storing the result in RC.</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>20AABBCC</td>
+            <td>Multiply</td>
+            <td>MUL RA RB RC</td>
+            <td>Multiplies RA and RB, storing the result in RC.</td>
+            <td>2</td>
+        </tr>
+        <tr>
+            <td>30AABBCC</td>
+            <td>Divide</td>
+            <td>DIV RA RB RC</td>
+            <td>Divides RA by RB, storing the result in RC.</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td>40AABBCC</td>
+            <td>And</td>
+            <td>AND RA RB RC</td>
+            <td>Calculates the bitwise AND of RA and RB, storing the result in
+                RC.</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>50AABBCC</td>
+            <td>Not And</td>
+            <td>NAN RA RB RC</td>
+            <td>Calculates the bitwise NAND of RA and RB, storing the result in
+                RC.</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>60AABBCC</td>
+            <td>Or</td>
+            <td>ORR RA RB RC</td>
+            <td>Calculates the bitwise OR of RA and RB, storing the result in
+                RC.</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>70AABBCC</td>
+            <td>Not Or</td>
+            <td>NOR RA RB RC</td>
+            <td>Calculates the bitwise NOR of RA and RB, storing the result in
+                RC.</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>80AABBCC</td>
+            <td>Exclusive Or</td>
+            <td>XOR RA RB RC</td>
+            <td>Calculates the bitwise XOR of RA and RB, storing the result in
+                RC.</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>90AABBCC</td>
+            <td>Modulus</td>
+            <td>MOD RA RB RC</td>
+            <td>Calculates the modulus<sup>&dagger;</sup> (remainder) of RA
+            divided by RB.</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td>A0AABBCC</td>
+            <td>Branch if &gt;</td>
+            <td>BGT RA RB RC</td>
+            <td>Jumps to the location in RC if RA is greater than RB.</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td>B0AABBCC</td>
+            <td>Branch if =</td>
+            <td>BEQ RA RB RC</td>
+            <td>Jumps to the location in RC if RA is equal to RB.</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td>C0AABBCC</td>
+            <td>Load Register</td>
+            <td>LDR RA RB RC</td>
+            <td>Loads the value stored in memory at the location specified by
+                the sum of RA and RB into RC.</td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td>D0AABBCC</td>
+            <td>Store Register</td>
+            <td>STR RA RB RC</td>
+            <td>Stores the value in RC to the memory location specified by the
+                sum of RA and RB.</td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td>E0IIIIII</td>
+            <td>Get Value</td>
+            <td>GET I</td>
+            <td>Begins an input interrupt with the given value.</td>
+            <td>0<sup>*</sup></td>
+        </tr>
+        <tr>
+            <td>F0IIIIII</td>
+            <td>Put Value</td>
+            <td>PUT I</td>
+            <td>Begins an output interrupt with the given value.</td>
+            <td>0<sup>*</sup></td>
+        </tr>
+</body>
