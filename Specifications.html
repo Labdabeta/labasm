@@ -49,7 +49,7 @@
             <th>1</th>
             <td>SUB</td>
             <td>NAN</td>
-            <td>XOR</td>
+            <td>MOD</td>
             <td>STR</td>
         </tr>
         <tr>
@@ -85,28 +85,28 @@
             <td>1</td>
         </tr>
         <tr>
-            <td>10AABBCC</td>
+            <td>01AABBCC</td>
             <td>Subtract</td>
             <td>SUB RA RB RC</td>
             <td>Subtracts RB from RA, storing the result in RC.</td>
             <td>1</td>
         </tr>
         <tr>
-            <td>20AABBCC</td>
+            <td>02AABBCC</td>
             <td>Multiply</td>
             <td>MUL RA RB RC</td>
             <td>Multiplies RA and RB, storing the result in RC.</td>
             <td>2</td>
         </tr>
         <tr>
-            <td>30AABBCC</td>
+            <td>03AABBCC</td>
             <td>Divide</td>
             <td>DIV RA RB RC</td>
             <td>Divides RA by RB, storing the result in RC.</td>
             <td>4</td>
         </tr>
         <tr>
-            <td>40AABBCC</td>
+            <td>04AABBCC</td>
             <td>And</td>
             <td>AND RA RB RC</td>
             <td>Calculates the bitwise AND of RA and RB, storing the result in
@@ -114,7 +114,7 @@
             <td>1</td>
         </tr>
         <tr>
-            <td>50AABBCC</td>
+            <td>05AABBCC</td>
             <td>Not And</td>
             <td>NAN RA RB RC</td>
             <td>Calculates the bitwise NAND of RA and RB, storing the result in
@@ -122,7 +122,7 @@
             <td>1</td>
         </tr>
         <tr>
-            <td>60AABBCC</td>
+            <td>06AABBCC</td>
             <td>Or</td>
             <td>ORR RA RB RC</td>
             <td>Calculates the bitwise OR of RA and RB, storing the result in
@@ -130,7 +130,7 @@
             <td>1</td>
         </tr>
         <tr>
-            <td>70AABBCC</td>
+            <td>07AABBCC</td>
             <td>Not Or</td>
             <td>NOR RA RB RC</td>
             <td>Calculates the bitwise NOR of RA and RB, storing the result in
@@ -138,7 +138,7 @@
             <td>1</td>
         </tr>
         <tr>
-            <td>80AABBCC</td>
+            <td>08AABBCC</td>
             <td>Exclusive Or</td>
             <td>XOR RA RB RC</td>
             <td>Calculates the bitwise XOR of RA and RB, storing the result in
@@ -146,7 +146,7 @@
             <td>1</td>
         </tr>
         <tr>
-            <td>90AABBCC</td>
+            <td>09AABBCC</td>
             <td>Modulus</td>
             <td>MOD RA RB RC</td>
             <td>Calculates the modulus<sup>&dagger;</sup> (remainder) of RA
@@ -154,21 +154,21 @@
             <td>4</td>
         </tr>
         <tr>
-            <td>A0AABBCC</td>
+            <td>0AAABBCC</td>
             <td>Branch if &gt;</td>
             <td>BGT RA RB RC</td>
             <td>Jumps to the location in RC if RA is greater than RB.</td>
             <td>4</td>
         </tr>
         <tr>
-            <td>B0AABBCC</td>
+            <td>0BAABBCC</td>
             <td>Branch if =</td>
             <td>BEQ RA RB RC</td>
             <td>Jumps to the location in RC if RA is equal to RB.</td>
             <td>4</td>
         </tr>
         <tr>
-            <td>C0AABBCC</td>
+            <td>0CAABBCC</td>
             <td>Load Register</td>
             <td>LDR RA RB RC</td>
             <td>Loads the value stored in memory at the location specified by
@@ -176,7 +176,7 @@
             <td>3</td>
         </tr>
         <tr>
-            <td>D0AABBCC</td>
+            <td>0DAABBCC</td>
             <td>Store Register</td>
             <td>STR RA RB RC</td>
             <td>Stores the value in RC to the memory location specified by the
@@ -184,17 +184,22 @@
             <td>3</td>
         </tr>
         <tr>
-            <td>E0IIIIII</td>
+            <td>0EAABBCC</td>
             <td>Get Value</td>
-            <td>GET I</td>
+            <td>GET RA RB RC</td>
             <td>Begins an input interrupt with the given value.</td>
             <td>0<sup>*</sup></td>
         </tr>
         <tr>
-            <td>F0IIIIII</td>
+            <td>0FAABBCC</td>
             <td>Put Value</td>
-            <td>PUT I</td>
+            <td>PUT RA RB RC</td>
             <td>Begins an output interrupt with the given value.</td>
             <td>0<sup>*</sup></td>
         </tr>
+        <sup>&dagger;</sup>The behaviour of modulus on negative inputs is
+        specific to implementation.<br>
+        <sup>*</sup>Get and Put instructions block the process to call the
+        operating system. However the operating system may use particular calls
+        which have execution times specific to implementation.
 </body>
